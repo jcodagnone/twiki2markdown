@@ -23,6 +23,7 @@ import junit.framework.Assert;
 import org.apache.maven.doxia.module.markdown.MarkdownSink;
 import org.apache.maven.doxia.module.twiki.TWikiParser;
 import org.apache.maven.doxia.parser.ParseException;
+import org.junit.Test;
 
 /*
  * Copyright (c) 2011 Zauber S.A. -- All rights reserved
@@ -53,6 +54,21 @@ public class TwikiToMarkdownTest {
         parser.parse(reader, new MarkdownSink(writer));
         Assert.assertEquals(expected, writer.getBuffer().toString());
     }
+    
+    @Test
+    public final void complexListingTest() throws ParseException {
+        String text = "De estos 3 parametros:\n" + 
+            "   * el momento en que se realizen los cambios puede definirse\n" +
+            "   * el tiempo de vencimiento de la cache en cada nodo de CloudFront no es determinable\n" +
+            "   * el tiempo de vencimiento de la cache en el browser de cada cliente no es determinable";
+        
+        assertParse(text, "\nDe estos 3 parametros:\n" +
+        		"\n" +
+        		"* el momento en que se realizen los cambios puede definirse\n" +
+        		"* el tiempo de vencimiento de la cache en cada nodo de [CloudFront](./CloudFront.html) no es determinable\n" +
+                "* el tiempo de vencimiento de la cache en el browser de cada cliente no es determinable\n\n");
+    }
 
+    
 
 }

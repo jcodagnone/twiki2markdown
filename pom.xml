@@ -29,40 +29,6 @@
           <url>https://github.com/zauberlabs/twiki2markdown/issues</url>
         </issueManagement>
 
-	<build>
-          <plugins>
-		<plugin>
-			<groupId>com.mycila.maven-license-plugin</groupId>
-			<artifactId>maven-license-plugin</artifactId>
-			<version>1.9.0</version>
-                        <inherited>true</inherited>
-			<configuration>
-				<header>src/HEADER.txt</header>
-				<includes>
-					<include>**/*.java</include>
-					<include>**/*.rb</include>
-				</includes>
-				<excludes>
-					<exclude>target/**</exclude>
-					<exclude>.gitignore</exclude>
-					<exclude>**/*.txt</exclude>
-				</excludes>
-				<encoding>iso-8859-1</encoding>
-				<strictCheck>true</strictCheck>
-			</configuration>
-			<executions>
-				<execution>
-					<goals>
-						<goal>check</goal>
-					</goals>
-				</execution>
-			</executions>
-		</plugin>
-  	    </plugins>
-
-	</build>
-
-
 
 	<dependencies>
  
@@ -88,4 +54,55 @@
 			<version>4.10</version>
 		</dependency>
 	</dependencies>
+	 <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>1.5</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>com.zaubersoftware.labs.twiki2markdown.App</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+	<plugin>
+		<groupId>com.mycila.maven-license-plugin</groupId>
+		<artifactId>maven-license-plugin</artifactId>
+		<version>1.9.0</version>
+                <inherited>true</inherited>
+		<configuration>
+			<header>src/HEADER.txt</header>
+			<includes>
+				<include>**/*.java</include>
+				<include>**/*.rb</include>
+			</includes>
+			<excludes>
+				<exclude>target/**</exclude>
+				<exclude>.gitignore</exclude>
+				<exclude>**/*.txt</exclude>
+			</excludes>
+			<encoding>iso-8859-1</encoding>
+			<strictCheck>true</strictCheck>
+		</configuration>
+		<executions>
+			<execution>
+				<goals>
+					<goal>check</goal>
+				</goals>
+			</execution>
+		</executions>
+	</plugin>
+    </plugins>
+  </build>
 </project>

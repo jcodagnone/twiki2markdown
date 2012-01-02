@@ -15,9 +15,11 @@
  */
 package com.zaubersoftware.labs.twiki2markdown;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
@@ -33,10 +35,13 @@ import org.apache.maven.doxia.parser.ParseException;
  */
 public final class App {
 
+    
+    
     /**
      * Creates the App.
      */
-    private App() {}
+    private App() {
+    }
 
     /**
      * @param args
@@ -46,10 +51,13 @@ public final class App {
      * @throws UnsupportedEncodingException
      */
     public static void main(final String[] args) throws ParseException, IOException {
-        FileReader reader = new FileReader(args[0]);
+        System.setOut(new PrintStream(System.out, true, "iso-8859-1"));
+
+        InputStreamReader reader = new InputStreamReader(new FileInputStream(args[0]), "iso-8859-1");
+
         TWikiParser parser = new TWikiParser();
         StringWriter writer = new StringWriter();
-        parser.parse(reader, new MarkdownSink(writer));
+        parser.parse(reader, new FilteredMarkdownSink(writer, args[0]));
         System.out.print(writer.getBuffer().toString());
     }
 
