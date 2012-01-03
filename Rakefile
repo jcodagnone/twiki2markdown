@@ -17,10 +17,11 @@ Jeweler::Tasks.new do |gem|
   gem.name = "twiki2markdown"
   gem.homepage = "http://github.com/kshmir/twiki2markdown"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = "Gem for migrating a TWiki-based wiki to a github wiki with markdown syntax"
+  gem.description = "This gem handles the migration and commit of a TWiki project to a github wiki, uses java in the backend to parse the files"
   gem.email = "cristianpereyra@zaubersoftware.com"
   gem.authors = ["Cristian Pereyra"]
+  gem.executables << "twiki2markdown"
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
