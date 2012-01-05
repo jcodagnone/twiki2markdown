@@ -48,3 +48,9 @@ pkg
 
 # For rubinius:
 #*.rbc
+.classpath
+.project
+.settings
+.checkstyle
+bin
+target
