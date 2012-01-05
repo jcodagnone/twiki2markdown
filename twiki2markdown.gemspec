@@ -9,23 +9,35 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Cristian Pereyra"]
-  s.date = "2012-01-03"
+  s.date = "2012-01-05"
   s.description = "This gem handles the migration and commit of a TWiki project to a github wiki, uses java in the backend to parse the files"
   s.email = "cristianpereyra@zaubersoftware.com"
+  s.executables = ["twiki2markdown", "twiki2markdown.jar"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
     "README.rdoc"
   ]
   s.files = [
     ".document",
+    ".project",
     "Gemfile",
+    "Gemfile.lock",
     "LICENSE.txt",
     "README.rdoc",
     "Rakefile",
     "VERSION",
+    "bin/twiki2markdown",
+    "bin/twiki2markdown.jar",
     "lib/twiki2markdown.rb",
     "test/helper.rb",
-    "test/test_twiki2markdown.rb"
+    "test/test_gollum/Home.md",
+    "test/test_gollum/images/Home/baboon.png",
+    "test/test_twiki/data/sample_wiki/WebHome.txt",
+    "test/test_twiki/data/sample_wiki/WebInfo.txt",
+    "test/test_twiki/pub/sample_wiki/WebHome/baboon.jpg,v",
+    "test/test_twiki/pub/sample_wiki/WebHome/baboon.png",
+    "test/test_twiki2markdown.rb",
+    "twiki2markdown.gemspec"
   ]
   s.homepage = "http://github.com/kshmir/twiki2markdown"
   s.licenses = ["MIT"]
@@ -38,19 +50,22 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_development_dependency(%q<shoulda>, [">= 0"])
-      s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
-      s.add_development_dependency(%q<jeweler>, ["~> 1.6.4"])
+      s.add_development_dependency(%q<shoulda-context>, [">= 0"])
+      s.add_development_dependency(%q<bundler>, [">= 0"])
+      s.add_development_dependency(%q<jeweler>, [">= 0"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
     else
       s.add_dependency(%q<shoulda>, [">= 0"])
-      s.add_dependency(%q<bundler>, ["~> 1.0.0"])
-      s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
+      s.add_dependency(%q<shoulda-context>, [">= 0"])
+      s.add_dependency(%q<bundler>, [">= 0"])
+      s.add_dependency(%q<jeweler>, [">= 0"])
       s.add_dependency(%q<rcov>, [">= 0"])
     end
   else
     s.add_dependency(%q<shoulda>, [">= 0"])
-    s.add_dependency(%q<bundler>, ["~> 1.0.0"])
-    s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
+    s.add_dependency(%q<shoulda-context>, [">= 0"])
+    s.add_dependency(%q<bundler>, [">= 0"])
+    s.add_dependency(%q<jeweler>, [">= 0"])
     s.add_dependency(%q<rcov>, [">= 0"])
   end
 end
