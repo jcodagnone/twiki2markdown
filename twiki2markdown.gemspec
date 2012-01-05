@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "twiki2markdown"
-  s.version = "0.0.0"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Cristian Pereyra"]
@@ -29,6 +29,9 @@ Gem::Specification.new do |s|
     "bin/twiki2markdown",
     "bin/twiki2markdown.jar",
     "lib/twiki2markdown.rb",
+    "pom.xml",
+    "src/main/java/com/zaubersoftware/labs/twiki2markdown/App.java",
+    "src/test/java/com/zaubersoftware/labs/twiki2markdown/test/TwikiToMarkdownTest.java",
     "test/helper.rb",
     "test/test_gollum/Home.md",
     "test/test_gollum/images/Home/baboon.png",
