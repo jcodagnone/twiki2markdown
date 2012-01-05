@@ -21,7 +21,7 @@ Jeweler::Tasks.new do |gem|
   gem.description = "This gem handles the migration and commit of a TWiki project to a github wiki, uses java in the backend to parse the files"
   gem.email = "cristianpereyra@zaubersoftware.com"
   gem.authors = ["Cristian Pereyra"]
-  gem.executables << "twiki2markdown"
+  gem.executables = [ "twiki2markdown", "twiki2markdown.jar" ] 
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new

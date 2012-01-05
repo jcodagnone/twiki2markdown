@@ -1,57 +1,109 @@
 #!/usr/bin/env ruby
 # A script that will pretend to resize a number of images
+require 'fileutils'
+require 'iconv'
 
 class Twiki2Markdown
-  
-  def self.check_params(args)
-    puts args.to_json
-  end
-  
   def self.do_migration(args)
-    check_params args
-    
-    if (not args[0] or not args[1])
-      puts "Params required: migrator.rb from-path to-path #{args[0]} #{args[1]}"
-    else
 
+    location = File.expand_path "#{File.dirname(__FILE__)}/../bin/"
+
+    if (not args[:from] or not args[:to])
+      puts "twiki2markdown --help for usage info"
+    else
+      args[:branch]  ||= "master"
+      args[:remote]  ||= "origin"
+      args[:logfile] ||= "/dev/null"
+      args[:commit]  ||= "migrating with twiki2markdown"
+      
       added_files = []
 
-      start_dir = args[0]
-      last_dir = args[0].split(/\//)
-      to_dir = args[1]
-      image_dir = "#{args[0]}/../../pub/#{last_dir[last_dir.size - 1]}"
+      start_dir = args[:from]
+      last_dir  = args[:from].split(/\//).last
+      to_dir    = args[:to]
+      image_dir = File.expand_path "#{args[:from]}/../../pub/#{last_dir}"
 
-      `mkdir #{to_dir}`
-      `mkdir #{to_dir}/images`
+      FileUtils.mkdir to_dir             unless File.exists? to_dir
+      FileUtils.mkdir "#{to_dir}/images" unless File.exists? "#{to_dir}/images"
 
       dir = Dir.open(start_dir)
       dir.each do |file|
         added_files.push file if file.match(/^.*\.txt$/)
       end
 
+      if not File.exists? to_dir
+        Dir.mkdir to_dir
+      end
+
+      added_files = Iconv.open("utf8","iso8859-1") { |cd|
+        added_files.collect { |s| cd.iconv(s) }
+      }
+
       added_files.each do |file|
+
         if file.match(/Web[A-Z]+[a-z0-9]+/) and not file.match(/WebHome/)
         next
         end
-
-        if not File.exists? to_dir
-          Dir.mkdir to_dir
+        
+        if (file.match(/(á|ñ|í|ó|ú|é)/))
+          new_file = file.gsub /(á|ñ|í|ó|ú|é)/, ""
+          FileUtils.mv "#{start_dir}/#{file}", "#{start_dir}/#{new_file}"
+          file = new_file  
         end
-
+        
         destination = File.new(to_dir + "/" + file.gsub(/\.txt/,".md"), "w+")
 
-        puts "#{start_dir}/#{file} >>> #{destination.path}"
+        if args[:verbose]
+          puts "Parsing #{file}"
+        else
+          print "."
+          STDOUT.flush
+        end
 
         simple_name = file.gsub(/\.txt/,"")
 
         if File.exists? "#{image_dir}/#{simple_name}"
-          `mkdir #{to_dir}/images/#{simple_name}`
-          `cp #{image_dir}/#{simple_name}/* #{to_dir}/images/#{simple_name}/`
+          unless File.exists? "#{to_dir}/images/#{simple_name.gsub(/WebHome/, "Home")}"
+            FileUtils.mkdir "#{to_dir}/images/#{simple_name.gsub(/WebHome/, "Home")}"
+          end
+          Dir.open("#{image_dir}/#{simple_name}/").entries.each do |entry|
+            next if entry.match(/^\.{1,2}$/)
+            unless entry.match /\,v/
+              FileUtils.cp("#{image_dir}/#{simple_name}/#{entry}", "#{to_dir}/images/#{simple_name.gsub(/WebHome/, "Home")}")
+            end
+          end
         end
-        `java -jar twiki2markdown.jar #{start_dir}/#{file} | iconv -f iso-8859-1 -t utf8 > #{destination.path}`
+
+        `java -jar #{location}/twiki2markdown.jar #{start_dir}/#{file} | iconv -f iso-8859-1 -t utf8 > #{destination.path}`
       end
-      `mv #{to_dir}/WebHome.md #{to_dir}/Home.md`
+
+      FileUtils.mv "#{to_dir}/WebHome.md", "#{to_dir}/Home.md"
+      if File.exists? "#{to_dir}/images/WebHome"
+        FileUtils.mv "#{to_dir}/images/WebHome","#{to_dir}/images/Home"
+      end
+
+      old_pwd = Dir.pwd
+
+      Dir.chdir args[:to]
+
+      if args[:repo]
+        `git init > #{ args[:logfile] }`
+        `git remote add #{ args[:remote] } #{ args[:repo] } > #{ args[:logfile] }`
+        `git pull #{args[:remote]} #{args[:branch]}`
+      end
+
+      if File.exists? ".git"
+        puts "Adding files to git and commiting..." if args[:verbose]
+        `git add . > #{ args[:logfile] }`
+        `git commit -m "#{ args[:commit] }"`
+      end
+
+      if args[:push] == true
+        puts "Pushing..." if args[:verbose]
+        `git push #{args[:remote]} #{args[:branch]} > #{ args[:logfile] }`
+      end
+
+      Dir.chdir old_pwd
     end
   end
 end
-

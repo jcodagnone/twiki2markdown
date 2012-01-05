@@ -1,0 +1,5 @@
+---+++ Titulo
+
+Esta es una imagen <img src="%ATTACHURLPATH%/baboon.png"/>
+
+Este es un [attach](%ATTACHURLPATH%/baboon.png)

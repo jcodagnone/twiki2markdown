@@ -11,7 +11,33 @@ options = {}
 optparse = OptionParser.new do|opts|
 # Set a banner, displayed at the top
 # of the help screen.
-  opts.banner = "Usage: twiki2markdown [options] twikifile"
+  opts.banner = "twiki2markdown - Migrate TWiki to Github"
+    
+  options[:branch] = 'master'
+  opts.on( '-b', '--branch name', 'Branch for pushing to the repository, master by default' ) do |name|
+    options[:branch] = name
+  end
+    
+  options[:remote] = 'origin'
+  opts.on( '-r', '--remote name', 'Name of the git remote' ) do |name|
+    options[:remote] = name
+  end
+      
+  options[:commit] = 'twiki2markdown migration'
+  opts.on( '-c', '--commit message', 'Message of the update commit' ) do |message|
+    options[:commit] = message
+  end
+  
+  options[:push] = nil
+  opts.on( '-p', '--push', 'Push the content to the server, true to push' ) do
+    options[:push] = true
+  end
+
+
+  options[:repo] = nil
+  opts.on( '-u', '--repo URL', 'Repo URL' ) do |url|
+    options[:repo] = url
+  end
 
   # Define the options, and what they do
   options[:verbose] = false
@@ -19,8 +45,8 @@ optparse = OptionParser.new do|opts|
     options[:verbose] = true
   end
 
-  options[:logfile] = nil
-  opts.on( '-l', '--logfile FILE', 'Write log to FILE' ) do|file|
+  options[:logfile] = "/dev/null"
+  opts.on( '-l', '--logfile FILE', 'Write log to FILE. Use /dev/stdout to get output for everything' ) do|file|
     options[:logfile] = file
   end
   
@@ -32,11 +58,6 @@ optparse = OptionParser.new do|opts|
   options[:to] = nil
   opts.on( '-t', '--to PATH', 'Path to migration folder' ) do|file|
     options[:to] = file
-  end
-  
-  options[:repo] = nil
-  opts.on( '-r', '--repo URL', 'Save wiki info inside the given repo URL' ) do|file|
-    options[:repo] = file
   end
 
   # This displays the help screen, all programs are
