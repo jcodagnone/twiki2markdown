@@ -54,3 +54,6 @@ pkg
 .checkstyle
 bin
 target
+.springBeans
+velocity.log
+.DS_Store
