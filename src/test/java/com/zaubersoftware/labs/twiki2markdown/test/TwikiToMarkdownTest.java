@@ -20,10 +20,11 @@ import java.io.StringWriter;
 
 import junit.framework.Assert;
 
-import org.apache.maven.doxia.module.markdown.MarkdownSink;
 import org.apache.maven.doxia.module.twiki.TWikiParser;
 import org.apache.maven.doxia.parser.ParseException;
 import org.junit.Test;
+
+import com.zaubersoftware.labs.twiki2markdown.FilteredMarkdownSink;
 
 /*
  * Copyright (c) 2011 Zauber S.A. -- All rights reserved
@@ -51,7 +52,7 @@ public class TwikiToMarkdownTest {
         
         StringReader reader = new StringReader(from);
         StringWriter writer = new StringWriter();
-        parser.parse(reader, new MarkdownSink(writer));
+        parser.parse(reader, new FilteredMarkdownSink(writer, "/myfolder/myfilename.txt"));
         Assert.assertEquals(expected, writer.getBuffer().toString());
     }
     
@@ -65,8 +66,63 @@ public class TwikiToMarkdownTest {
         assertParse(text, "\nDe estos 3 parametros:\n" +
         		"\n" +
         		"* el momento en que se realizen los cambios puede definirse\n" +
-        		"* el tiempo de vencimiento de la cache en cada nodo de [CloudFront](./CloudFront.html) no es determinable\n" +
-                "* el tiempo de vencimiento de la cache en el browser de cada cliente no es determinable\n\n");
+        		"* el tiempo de vencimiento de la cache en cada nodo de [[CloudFront]] no es determinable\n" +
+                "* el tiempo de vencimiento de la cache en el browser de cada cliente no es determinable\n\n\n");
+    }
+    
+    @Test
+    public final void avoidLinkTest() throws ParseException {
+        String text = "There is _!SomeRandomWikiWord_ in the text";
+        
+        assertParse(text,"\nThere is _SomeRandomWikiWord_ in the text\n");
+        
+        String text2 = "---+++!SomeRandomWikiWord ";
+        
+        assertParse(text2,"### SomeRandomWikiWord\n");
+    }
+    
+    @Test
+    public final void avoidInvalidLinkFormat() throws ParseException {
+        String text2 = "Tag 2.0M2 de [[https://git.zaubersoftware.com/intextual/platform.git][Repo GIT]]";
+        
+        assertParse(text2,"\nTag 2.0M2 de [Repo GIT](https://git.zaubersoftware.com/intextual/platform.git)\n");
+    }
+    
+    @Test
+    public final void avoidBadWikiWordTest() throws ParseException {
+        String text = "SVN is not a wiki word";
+        
+        assertParse(text,"\nSVN is not a wiki word\n");
+    }
+    
+    @Test
+    public final void removeHTMLFromLinkTest() throws ParseException {
+        String text = "WikiPedia is a wiki word";
+        
+        assertParse(text,"\n [[WikiPedia]] is a wiki word\n");
+    }
+    
+    
+    @Test
+    public final void replaceImageLinks() throws ParseException {
+        String text = "<img src=\"some/uri.jpg\"/>";
+        
+        assertParse(text,"\n<img src=\"some/uri.jpg\"/>\n");
+    }
+    
+    @Test
+    public final void removeUnpercentWords() throws ParseException {
+        String text = "%TOC% %ATTACHURLPATH% %ICON{\"searchtopic\"}%%MAKETEXT{\"Search\"}%";
+        
+        assertParse(text,"\n images/myfilename\n");
+    }
+    
+    
+    @Test
+    public final void removeDoubleMark() throws ParseException {
+        String text = "---++!! Header";
+        
+        assertParse(text,"## Header\n");
     }
 
     
