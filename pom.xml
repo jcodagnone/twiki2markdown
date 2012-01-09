@@ -10,6 +10,59 @@
 	<artifactId>twiki2docbook</artifactId>
 	<groupId>com.zaubersoftware.labs.twiki2docbook</groupId>
 	<version>1.0-SNAPSHOT</version>
+	<scm>
+             <url>https://github.com/zauberlabs/twiki2markdown</url>
+	     <connection>scm:git:git@github.com:zauberlabs/twiki2markdown.git</connection>
+             <developerConnection>scm:git:git@github.com:zauberlabs/twiki2markdown.git</developerConnection>
+	</scm>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+        <inceptionYear>2011</inceptionYear>
+        <issueManagement>
+          <system>github</system>
+          <url>https://github.com/zauberlabs/twiki2markdown/issues</url>
+        </issueManagement>
+
+	<build>
+          <plugins>
+		<plugin>
+			<groupId>com.mycila.maven-license-plugin</groupId>
+			<artifactId>maven-license-plugin</artifactId>
+			<version>1.9.0</version>
+                        <inherited>true</inherited>
+			<configuration>
+				<header>src/HEADER.txt</header>
+				<includes>
+					<include>**/*.java</include>
+					<include>**/*.rb</include>
+				</includes>
+				<excludes>
+					<exclude>target/**</exclude>
+					<exclude>.gitignore</exclude>
+					<exclude>**/*.txt</exclude>
+				</excludes>
+				<encoding>iso-8859-1</encoding>
+				<strictCheck>true</strictCheck>
+			</configuration>
+			<executions>
+				<execution>
+					<goals>
+						<goal>check</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
+  	    </plugins>
+
+	</build>
+
+
 
 	<dependencies>
  
