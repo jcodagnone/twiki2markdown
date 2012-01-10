@@ -1,6 +1,7 @@
 = twiki2markdown
 
-Description goes here.
+Helps to migrate a TWiki wiki to a Markdown-based one.
+File manipulation and git interaction is done with ruby, file-level conversion is done using Java and the Maven Doxia project.
 
 == Contributing to twiki2markdown
  
@@ -14,6 +15,6 @@ Description goes here.
 
 == Copyright
 
-Copyright (c) 2012 Cristian Pereyra. See LICENSE.txt for
+Copyright (c) 2012 Zauberlabs. See LICENSE.txt for
 further details.
 

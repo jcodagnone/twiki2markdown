@@ -16,11 +16,11 @@ Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "twiki2markdown"
   gem.homepage = "http://github.com/kshmir/twiki2markdown"
-  gem.license = "MIT"
+  gem.license = "Apache 2.0"
   gem.summary = "Gem for migrating a TWiki-based wiki to a github wiki with markdown syntax"
   gem.description = "This gem handles the migration and commit of a TWiki project to a github wiki, uses java in the backend to parse the files"
   gem.email = "cristianpereyra@zaubersoftware.com"
-  gem.authors = ["Cristian Pereyra"]
+  gem.authors = ["Cristian Pereyra", "Mariano Cortesi"]
   gem.executables = [ "twiki2markdown", "twiki2markdown.jar" ] 
   # dependencies defined in Gemfile
 end
