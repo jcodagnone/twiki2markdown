@@ -109,7 +109,7 @@
     <repository>
       <id>zauber-code-snapshots</id>
       <name>Zauber Code Snapshots</name>
-      <url>https://repo1.zaubersoftware.com/content/repositories/zauber-code-snapshots</url>
+      <url>https://repo1.zauberlabs.com/content/repositories/zauber-code-snapshots</url>
       <releases><enabled>false</enabled></releases>
       <snapshots><enabled>true</enabled></snapshots>
    </repository>
